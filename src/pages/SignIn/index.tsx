@@ -1,38 +1,104 @@
-import React from "react";
-import {View, Text, StyleSheet, Image, TextInput, TouchableOpacity} from 'react-native'
+import React, {useState, useContext} from "react";
+//import { FiEye } from "react-icons/fi";
+
+import {View, 
+        Text, 
+        StyleSheet, 
+        Image, 
+        TextInput, 
+        TouchableOpacity, 
+        KeyboardAvoidingView,
+        Platform,
+        ActivityIndicator,
+    } from 'react-native'
+
+import { AuthContext } from "../../contexts/AuthContext";
+
+
 
 export default function SingIn(){
+
+    const {signIn, loadingAuth} = useContext(AuthContext)
+
+    const [show, setshow] = useState(true)
+    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
+    
+   async function handleLogin(){
+
+        if(email === '' || password === '' ) {
+            return;
+        }
+        
+        await signIn({email, password})
+    }
+    
     return(
+      
+    <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        style={styles.container2}>
+
         <View style={styles.container}>
            
             <Image style={styles.logo}
             source={require('../../assets/logo.png')}/>
+
+            
             
             <View style={styles.inputContainer}>
-                <TextInput style={styles.input} placeholder="Digite seu email"/>
-                <TextInput  style={styles.input} placeholder="Sua senha"/>
+                
+                <TextInput 
+                style={styles.input} 
+                placeholder="Digite seu email"
+                value={email}
+                onChangeText={setEmail}  
+                />
+              
+                <TextInput
+                style={styles.input} 
+                placeholder="Sua senha"
+                secureTextEntry={show}  
+                value={password}
+                onChangeText={setPassword}             
+                />
+           
             </View>
 
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttontext}>Acessar</Text>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                {loadingAuth ? (
+                    <ActivityIndicator size={25} color="#000"/>
+                ): (
+                    <Text style={styles.buttontext}>Acessar</Text>
+                )}        
             </TouchableOpacity>
             
         </View>
+    </KeyboardAvoidingView>
     )
 }
 
 const styles = StyleSheet.create({
+    container2:{
+        flex: 1,
+    },
+    
     container:{
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'       
+        alignItems: 'center',
+        backgroundColor: '#FFF',
     },
 
     logo:{
-        marginBottom: 18
+
+        top: -40,
+        width: 200,
+        height: 200
     },
     
     inputContainer:{
+        top: -50,
         width: '95%',
         alignItems: 'center',
         justifyContent: 'center', 
@@ -44,14 +110,15 @@ const styles = StyleSheet.create({
         width: '95%',
         height: 40,
         backgroundColor: '#C0C0C0',
-        marginBottom: 12,
+        marginBottom: 10,
         borderRadius: 4,
         paddingHorizontal: 8
 
     },
     
     button:{
-        width: '95%',
+        top: -50,
+        width: '85%',
         height: 40,
         backgroundColor: '#3fffa3',
         borderRadius: 4,
@@ -62,7 +129,7 @@ const styles = StyleSheet.create({
     buttontext:{
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#101026',
+        color: '#000',
     }
 
     
