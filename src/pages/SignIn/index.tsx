@@ -1,5 +1,5 @@
 import React, {useState, useContext} from "react";
-//import { FiEye } from "react-icons/fi";
+import { Ionicons } from "@expo/vector-icons";
 
 import {View, 
         Text, 
@@ -20,7 +20,7 @@ export default function SingIn(){
 
     const {signIn, loadingAuth} = useContext(AuthContext)
 
-    const [show, setshow] = useState(true)
+    const [show, setShow] = useState(true)
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
     
@@ -32,6 +32,8 @@ export default function SingIn(){
         
         await signIn({email, password})
     }
+
+   
     
     return(
       
@@ -60,11 +62,23 @@ export default function SingIn(){
                 placeholder="Sua senha"
                 secureTextEntry={show}  
                 value={password}
-                onChangeText={setPassword}             
-                />
+                onChangeText={setPassword}   
+                /> 
+
+                <TouchableOpacity style={styles.icon}  onPress={ () => setShow(!show)}>
+                    {show ? 
+                        
+                        <Ionicons name="eye" size={20} color="#000"/>  :
+                        
+                        <Ionicons name="eye-off" size={20} color="#000"/>
+                    }   
+                 </TouchableOpacity>      
+
+                 
            
             </View>
 
+           
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 {loadingAuth ? (
                     <ActivityIndicator size={25} color="#000"/>
@@ -72,6 +86,9 @@ export default function SingIn(){
                     <Text style={styles.buttontext}>Acessar</Text>
                 )}        
             </TouchableOpacity>
+
+           
+
             
         </View>
     </KeyboardAvoidingView>
@@ -130,6 +147,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         color: '#000',
+    },
+
+    icon:{
+        left: '41%',
+        top: '-33%'
     }
 
     
