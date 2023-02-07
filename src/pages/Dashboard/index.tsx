@@ -1,22 +1,30 @@
-import React, { useState} from 'react';
-import { Text, SafeAreaView, TouchableOpacity, TextInput, StyleSheet} from 'react-native'
+import React, { useState, useContext} from 'react';
+import { Text, SafeAreaView, TouchableOpacity, TextInput, StyleSheet, Button} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+import { AuthContext } from '../../contexts/AuthContext';
+import { api } from '../../services/api';
 import { StackParmsList } from '../../Routes/app.routes';
 
 export default function Dashboard(){
 
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const [table, setTable] = useState('');
+    const {signOut} = useContext(AuthContext)
 
     async function openOrder(){
         if(table === ''){
             return;
         }
 
-        navigation.navigate('Order', {number: table, order_id: 'asçldjalsdjasd'})
+        const response = await api.post('/order' , {
+            table: Number(table)
+        })
 
+       navigation.navigate('Order', {number: table, order_id: response.data.id })
+    
+       setTable('');
     }
 
 
@@ -38,6 +46,12 @@ export default function Dashboard(){
           <TouchableOpacity style={styles.button} onPress={openOrder}>
             <Text style={styles.buttonText}>Abrir mesa</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.button} onPress={signOut}>
+            <Text style={styles.buttonText}>Sair</Text>
+          </TouchableOpacity>
+
+         
         
         
         </SafeAreaView>
