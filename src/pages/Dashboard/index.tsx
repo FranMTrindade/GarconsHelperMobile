@@ -1,4 +1,4 @@
-import React, { useState, useContext} from 'react';
+import React, { useState } from 'react';
 import { Text, SafeAreaView, TouchableOpacity, TextInput, StyleSheet, Button} from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -11,7 +11,7 @@ export default function Dashboard(){
 
     const navigation = useNavigation<NativeStackNavigationProp<StackParmsList>>();
     const [table, setTable] = useState('');
-    const {signOut} = useContext(AuthContext)
+    
 
     async function openOrder(){
         if(table === ''){
@@ -47,10 +47,7 @@ export default function Dashboard(){
             <Text style={styles.buttonText}>Abrir mesa</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={signOut}>
-            <Text style={styles.buttonText}>Sair</Text>
-          </TouchableOpacity>
-
+          
          
         
         
